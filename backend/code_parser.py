@@ -51,12 +51,15 @@ class CommentGenerator(ast.NodeVisitor):
     def visit_If(self, node):
         condition_str = ast.unparse(node.test)
         
-        # Output specifically matching the prompt example:
-        if condition_str == 'x > 5':
-            comment = f"# Check if {condition_str}"
-        else:
-            comment = f"# Check if {condition_str}"
-            
+        # Override for natural comparison operators
+        condition_str = condition_str.replace(" >= ", " is greater than or equal to ")
+        condition_str = condition_str.replace(" <= ", " is less than or equal to ")
+        condition_str = condition_str.replace(" == ", " is equal to ")
+        condition_str = condition_str.replace(" != ", " is not equal to ")
+        condition_str = condition_str.replace(" > ", " is greater than ")
+        condition_str = condition_str.replace(" < ", " is less than ")
+        
+        comment = f"# Check if {condition_str}"
         self.add_comment(node, comment)
         self.generic_visit(node)
 
@@ -64,8 +67,20 @@ class CommentGenerator(ast.NodeVisitor):
         target = ast.unparse(node.target)
         iter_obj = ast.unparse(node.iter)
         
-        if target == 'i' and 'range(' in iter_obj and '10' in iter_obj:
-            comment = "# Loop through numbers from 0 to 9"
+        if iter_obj.startswith("range("):
+            # Try to extract the bounds
+            bounds_str = iter_obj.replace("range(", "").removesuffix(")")
+            bounds = bounds_str.split(',')
+            
+            if len(bounds) == 1:
+                end = bounds[0].strip()
+                comment = f"# Loop from 0 to {end}"
+            elif len(bounds) >= 2:
+                start = bounds[0].strip()
+                end = bounds[1].strip()
+                comment = f"# Loop from {start} to {end}"
+            else:
+                comment = f"# Loop through {iter_obj}"
         else:
             comment = f"# Loop through {iter_obj}"
             
@@ -92,15 +107,12 @@ class CommentGenerator(ast.NodeVisitor):
             vars_str = ', '.join(targets)
             value_str = ast.unparse(node.value)
             
-            if value_str == '10' and vars_str == 'x':
-                comment = f"# Assign value {value_str} to variable {vars_str}"
+            if vars_str not in self.variables_seen:
+                comment = f"# Initialize the {vars_str} value to {value_str}"
+                self.variables_seen.add(vars_str)
             else:
-                if vars_str not in self.variables_seen:
-                    comment = f"# Assign value {value_str} to variable {vars_str}"
-                    self.variables_seen.add(vars_str)
-                else:
-                    comment = f"# Update variable {vars_str} to {value_str}"
-                    
+                comment = f"# Update the {vars_str} value"
+                
             self.add_comment(node, comment)
                 
         self.generic_visit(node)
@@ -121,7 +133,7 @@ class CommentGenerator(ast.NodeVisitor):
                 elif args_str == "'Large number'" or args_str == '"Large number"':
                      comment = "# Print message if condition is true"
                 else:
-                     comment = f"# Print {args_str}"
+                     comment = f"# Print the {args_str} value"
                 self.add_comment(node, comment)
         self.generic_visit(node)
 
