@@ -26,7 +26,7 @@ body {
     display: flex;
     justify-content: center;
     background-image: radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.15), transparent 25%),
-                      radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.1), transparent 25%);
+        radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.1), transparent 25%);
 }
 
 .app-container {
@@ -50,6 +50,7 @@ header h1 {
     margin-bottom: 0.5rem;
     background: linear-gradient(135deg, #60a5fa, #34d399);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -135,12 +136,12 @@ header p {
 }
 
 .secondary-btn {
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.1);
     color: white;
 }
 
 .secondary-btn:hover {
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
 }
 
 textarea {
@@ -160,7 +161,8 @@ textarea {
     flex-grow: 1;
     padding: 1.5rem;
     overflow-y: auto;
-    background: #1e1e1e; /* Match prism theme bg */
+    background: #1e1e1e;
+    /* Match prism theme bg */
 }
 
 pre {
@@ -176,26 +178,44 @@ code {
     font-size: 1rem !important;
 }
 
+/* Highlighted Comments */
+.token.comment {
+    color: #ffd700 !important;
+    /* Gold color for high visibility */
+    background: rgba(255, 215, 0, 0.1);
+    /* Subtle gold background */
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-style: normal !important;
+    font-weight: 500;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
 }
+
 ::-webkit-scrollbar-track {
     background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
     border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255,255,255,0.3);
+    background: rgba(255, 255, 255, 0.3);
 }
 
 /* Loading Overlay */
 .loading-overlay {
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background: rgba(15, 23, 42, 0.8);
     backdrop-filter: blur(4px);
     display: flex;
@@ -215,7 +235,7 @@ code {
 .spinner {
     width: 40px;
     height: 40px;
-    border: 3px solid rgba(255,255,255,0.1);
+    border: 3px solid rgba(255, 255, 255, 0.1);
     border-radius: 50%;
     border-top-color: var(--accent-color);
     animation: spin 1s ease-in-out infinite;
@@ -231,7 +251,7 @@ code {
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
     font-weight: 500;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     transition: opacity 0.3s, transform 0.3s;
     z-index: 50;
 }
@@ -242,15 +262,31 @@ code {
 
 /* Animations */
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 @keyframes fadeInDown {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
